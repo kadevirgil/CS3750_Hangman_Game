@@ -32,7 +32,7 @@ export default function LandingPage() {
             window.alert(await response.json())
             return;
         }
-        updateUser({name: "", numGuesses: 0, lengthOfWord: 0});
+        updateUser({name: "chad", numGuesses: 0, lengthOfWord: 0});
         navigate("/hangman");
     }
 
@@ -42,7 +42,7 @@ export default function LandingPage() {
             <form onSubmit={onStartGame}>
                 <div>
                     <label>Please enter in your name: </label>
-                    <input type="text" name="name"  onChange={(e) => updateSession({name: e.target.value})} required/>
+                    <input type="text" name="name"  value ={user.name} onChange={(e) => updateSession({name: e.target.value})} required/>
                     <br/>  
                     <button type="submit" value="Start Game">Start Game</button>
                 </div>
