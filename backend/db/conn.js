@@ -23,13 +23,9 @@ module.exports = {
                 // Send a ping to confirm a successful db connection
                 await client.db('admin').command({ ping: 1 });
                 console.log("Pinged your deployment. You successfully conect to MongoDb!");
-
-                // This gives us access to our word database
-                word_db = client.db('hangman-words');
-                console.log("Successfully connected to hangman words database");
                 
                 // This gives us access to our highscore database
-                highscore_db = client.db('hangman-highscores');
+                _db = client.db('hangman-highscores');
                 console.log("Successfully connected to hangman high scores database");
             } finally {
                 // Ensures that the client will close when you finish/error
@@ -40,10 +36,7 @@ module.exports = {
         run().catch(console.dir); 
     },
 
-    getWordDb: function () {
-        return word_db; 
-    },
-    getHighScoreDb: function () {
-        return highscore_db; 
+    getDb: function () {
+        return _db; 
     },
 };
