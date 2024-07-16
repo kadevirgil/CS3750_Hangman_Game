@@ -64,7 +64,7 @@ questionable
 fuzzy
 thing
 damage
-hard-to-find
+hard
 helpful
 elfin
 annoy
@@ -245,7 +245,7 @@ alarm
 disillusioned
 caption
 boorish
-well-made
+well
 blind
 rescue
 polite
@@ -290,7 +290,7 @@ plain
 prevent
 embarrass
 nonchalant
-black-and-white
+white
 fearless
 mix
 offbeat
@@ -554,7 +554,6 @@ nappy
 distribution
 spot
 arrest
-large
 count
 outstanding
 wakeful
@@ -622,7 +621,7 @@ wind
 sweltering
 psychotic
 clip
-high-pitched
+pitched
 transport
 picture
 gorgeous
@@ -707,7 +706,6 @@ glossy
 heal
 art
 harbor
-long
 abashed
 stir
 toothpaste
@@ -921,7 +919,8 @@ tasty
 knot
 price
 mate
-extra-large
+extra
+large
 finger
 rhetorical
 wander
@@ -938,7 +937,8 @@ sheep
 literate
 show
 quixotic
-long-term
+long
+term
 snake
 fact
 natural

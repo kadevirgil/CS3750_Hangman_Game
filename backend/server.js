@@ -3,7 +3,6 @@ const app = express();
 
 const cors = require("cors")
 const MongoStore = require("connect-mongo"); 
-
 const session = require("express-session")
 
 
@@ -18,6 +17,17 @@ app.use(cors(
         credentials: true,
         optionsSuccessStatus: 204,
         allowedHeaders: ["Content-Type", "Authorization"]
+    }
+));
+
+app.use(session(
+    {
+        secret: 'keyboard cat',
+        saveUninitialized: false, // dont create sessions until something is stored
+        resave: false, // don't save session if unmodified 
+        store: MongoStore.create({
+            mongoUrl: process.env.ATLAS_URI
+        })
     }
 ));
 
