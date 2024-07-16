@@ -38,12 +38,13 @@ export default function LandingPage() {
 
     return(
         <div>
-            <h3>Welcome to Hangman Game</h3>
+            <h3>Welcome to Hangman</h3>
             <form onSubmit={onStartGame}>
                 <div>
-                <p>Enter in your name and click on Start Game button to start the game</p>
-                <label>Name: </label>
-                <input type="text" name="name"  onChange={(e) => updateSession({name: e.target.value})} required/>
+                    <label>Please enter in your name: </label>
+                    <input type="text" name="name"  onChange={(e) => updateSession({name: e.target.value})} required/>
+                    <br/>  
+                    <button type="submit" value="Start Game">Start Game</button>
                 </div>
             </form>
             
