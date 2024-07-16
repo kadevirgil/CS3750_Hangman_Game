@@ -15,7 +15,7 @@ routes.route('/records/add').post(async (req, res) =>{
             numGuesses: 0,
             lengthOfWord: 0
         };
-        const account = await db_connect.collection("records").insertOne(myobj);
+        await db_connect.collection("highscores").insertOne(myobj);
         errorCode = 200;
         let status = "Success";
         res.status(errorCode).json(status);
