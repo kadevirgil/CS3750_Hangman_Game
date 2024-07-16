@@ -22,7 +22,7 @@ app.use(cors(
 ));
 
 app.use(express.json());
-// app.use(require("./routes/hello-world")); 
+app.use(require("./routes/records")); 
 
 
 const dbo = require("./db/conn");
