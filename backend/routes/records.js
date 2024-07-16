@@ -15,21 +15,15 @@ routes.route('/records/add').post(async (req, res) =>{
             numGuesses: 0,
             lengthOfWord: 0
         };
-        const account = await db_connect.collection("records").insertOne
+        const account = await db_connect.collection("records").insertOne(myobj);
         errorCode = 200;
-        let status = "success";
+        let status = "Success";
         res.status(errorCode).json(status);
             
         
     } catch(err){
         throw err;
     }
-    
-    
-
-    res.status(errorCode).json({
-        status: status
-    });
 })
 
 module.exports = routes; 
