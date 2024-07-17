@@ -4,29 +4,39 @@ import { useState } from 'react';
 
 //allow 6 guesses
 
+//generate random word
+function GenerateRandomWord() {
 
-export default function LandingPage() {
+}
+
+export default function GamePage() {
     const navigate = useNavigate();
-    const [user, updateUser] = useState({
+    const [user, setUser] = useState({
         name: "",
         numGuesses: 0,
         lengthOfWord: 0
     });
 
+    let word = '';
+
+    //function to handle the click of a letter
+    function onClickLetter() {
+
+    }
+
+    word = "Test"; //Testing purposes
+
     function updateSession(jsonObj) {
-        return updateUser((prevJsonObj) => {
+        return setUser((prevJsonObj) => {
             return { ...prevJsonObj, ...jsonObj };
         });
     }
-    async function onStartGame(e) {
-        e.preventDefault();
-        const newPerson = {...user};
-        const response = await fetch("http://localhost:4000/records/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newPerson),
+
+    //Not sure if I need this onStartGame function
+    async function PlayGame(e) {
+
+        const response = await fetch("http://localhost:4000/records/generateWord", {
+            method: "GET",
             credentials: "include"
             
         })
@@ -34,14 +44,26 @@ export default function LandingPage() {
             window.alert(await response.json())
             return;
         }
-        updateUser({name: "", numGuesses: 0, lengthOfWord: 0});
-        navigate("/hangman");
+        word = response;
+        setUser({numGuesses: 0, lengthOfWord: word.length});
+        
+    }
+
+    //Function to get the number of letter spaces to display to the user
+    function PrintWordSpaces() {
+        let wordLength = word.length;
+        console.log(wordLength)
+        let wordSpaces = [];
+        for (let i = 0; i < wordLength; i++) {
+            wordSpaces[i] = "____ ";
+        }
+        return(<p>{wordSpaces}</p>);
     }
 
     return(
         <div>
             <h3>Welcome to Hangman</h3>
-            <form onSubmit={onStartGame}>
+            
                 <div>
                     <label>Start guessing letters!</label>
                 </div>
@@ -49,6 +71,18 @@ export default function LandingPage() {
                 <br/>
                 <br/>
                 <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <div style={{paddingLeft: 50}}>
+                    <PrintWordSpaces/>
+                </div>
                 <br/>
                 <br/>
                 <br/>
@@ -85,12 +119,12 @@ export default function LandingPage() {
                         <button value="Z">Z</button>                        
                     </div>
                 </div>
-                
-            </form>
-            
             
         </div>
     );
 }
 
 //<input type="text" name="name"  onChange={(e) => updateSession({name: e.target.value})} required/>
+
+//<form onSubmit={PlayGame}>
+//</form>
