@@ -29,7 +29,7 @@ routes.route('/records/add').post(async (req, res) =>{
 })
 
 // Getting all highscores for a given word length
-routes.route('/records/:wordLength').get(async (req, res) => {
+routes.route('/records/highscores/:wordLength').get(async (req, res) => {
     try {
         let db_connect = dbo.getDb();
         let myQuery = { lengthOfWord: req.params.wordLength };
