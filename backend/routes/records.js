@@ -4,7 +4,7 @@ const routes = express.Router();
 
 const { open } = require('node:fs/promises');
 
-const file = await open('../words.txt');
+const file = open('../backend/words.txt');
 
 // Connect to db
 const dbo = require('../db/conn');
