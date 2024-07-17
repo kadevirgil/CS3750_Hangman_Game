@@ -61,11 +61,28 @@ export default function HighScores() {
                     
     }   
     function highScoresList() {
+        return records.map((record) => {
+            return (
+                <scores 
+                records={record} 
+                key={record._id} 
+                />
+            );
+        });
 
     }
     return (
         <div>
             <h3>High Scores for [BLANK] letter words </h3>
+            <table style={{ marginTop: 20 }} >
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Number of Guesses</th>
+                    </tr>
+                </thead>
+                <tbody>{highScoresList()}</tbody>
+            </table>
             <button value ="Play Again" onClick={playAgain}>Play Again</button>
             <button value ="Logout" onClick={logout}>Logout</button>
             
