@@ -17,6 +17,12 @@ export default function GamePage() {
         lengthOfWord: 0
     });
 
+    function updateSession(jsonObj) {
+        return setUser((prevJsonObj) => {
+            return { ...prevJsonObj, ...jsonObj };
+        });
+    }
+
     let word = '';
 
     //function to handle the click of a letter
@@ -25,12 +31,6 @@ export default function GamePage() {
     }
 
     word = "Test"; //Testing purposes
-
-    function updateSession(jsonObj) {
-        return setUser((prevJsonObj) => {
-            return { ...prevJsonObj, ...jsonObj };
-        });
-    }
 
     //Not sure if I need this onStartGame function
     async function PlayGame(e) {
