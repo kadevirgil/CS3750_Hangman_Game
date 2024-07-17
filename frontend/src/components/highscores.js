@@ -8,10 +8,11 @@ const scores = (props) => (
 );
 export default function HighScores() {
     const navigate = useNavigate();
+    const params = useParams();
     const [records, setRecords] = useState([]);
      useEffect(() => {
         async function getRecords() {
-            const response = await fetch(`http://localhost:4000/records/${records.length}`, ); // change ${params.wordLength}
+            const response = await fetch(`http://localhost:4000/records/${params.wordLength}`, ); // change ${params.wordLength}
             if (response.status === 400) {
                 const message = `An error occurred: ${response.statusText}`;
                 window.alert(message);
