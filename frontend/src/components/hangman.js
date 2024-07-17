@@ -30,7 +30,7 @@ export default function GamePage() {
 
     }
 
-    word = "Test"; //Testing purposes
+    word = "TestWord"; //Testing purposes
 
     //Not sure if I need this onStartGame function
     async function PlayGame(e) {
@@ -45,6 +45,7 @@ export default function GamePage() {
             return;
         }
         word = response;
+        console.log(`The word sent from the backend is ${word}`);
         setUser({numGuesses: 0, lengthOfWord: word.length});
         
     }
