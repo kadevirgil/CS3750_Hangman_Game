@@ -2,6 +2,10 @@ const express = require('express');
 
 const routes = express.Router(); 
 
+const { open } = require('node:fs/promises');
+
+const file = await open('../words.txt');
+
 // Connect to db
 const dbo = require('../db/conn');
 
@@ -44,6 +48,13 @@ routes.route('/records/highscores/:wordLength').get(async (req, res) => {
 routes.route('/records/generateWord').get(async (req, res) => {
     try {
         // Generate word logic here
+        let number = Math.floor(Math.random() * 1001);
+        let words = [];
+        for await (const line of file.readLines()) {
+            words.push(file[line]); 
+        }
+        console.log(words[number]);
+        res.status(200).send(words[number]);
     } catch (err) {
         throw err;
     }
