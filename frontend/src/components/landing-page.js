@@ -5,14 +5,14 @@ import { useState } from 'react';
 
 export default function LandingPage() {
     const navigate = useNavigate();
-    const [user, updateUser] = useState({
+    const [user, setUser] = useState({
         name: "",
         numGuesses: 0,
         lengthOfWord: 0
     });
 
     function updateSession(jsonObj) {
-        return updateUser((prevJsonObj) => {
+        return setUser((prevJsonObj) => {
             return { ...prevJsonObj, ...jsonObj };
         });
     }
@@ -32,7 +32,7 @@ export default function LandingPage() {
             window.alert(await response.json())
             return;
         }
-        updateUser({name: "chad", numGuesses: 0, lengthOfWord: 0});
+        setUser({name: "chad", numGuesses: 0, lengthOfWord: 0});
         navigate("/hangman");
     }
 
