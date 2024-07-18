@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useNavigate} from 'react-router';
 import { useState } from 'react';
 
 //allow 6 guesses
 
-//generate random word
-function GenerateRandomWord() {
-
-}
 
 function Letter({ letter, onLetterClick, disabled }) {
     return (
@@ -51,45 +47,57 @@ export default function GamePage() {
         }
     };
 
-    let testword = '';
+    let testword = 'sample';
 
     //function to handle the click of a letter
 
     
 
-    //Not sure if I need this onStartGame function
-    async function PlayGame(e) {
+    // Get random word when page renders
+    useEffect(() => {
+        async function PlayGame(e) {
 
-        const response = await fetch("http://localhost:4000/records/generateWord", {
-            method: "GET",
-            credentials: "include"
+            const response = await fetch("http://localhost:4000/records/generateWord", {
+                method: "GET",
+                credentials: "include"
+                
+            })
+            if (response.status === 400) {
+                window.alert(await response.json())
+                return;
+            }
+            word = response;
+            console.log(`The word sent from the backend is ${word}`);
+            //setUser({numGuesses: 0, lengthOfWord: word.length});
             
-        })
-        if (response.status === 400) {
-            window.alert(await response.json())
-            return;
         }
-        //word = response;
-        console.log(`The word sent from the backend is ${word}`);
-        //setUser({numGuesses: 0, lengthOfWord: word.length});
-        
-    }
+        PlayGame();
+    },[])
+    
 
     //Function to get the number of letter spaces to display to the user
-    function PrintWordSpaces() {
+    function PrintWordSpaces({ word, guessedLetters }) {
         //let wordLength = word.length;
-
         //tests
-        testword = "Sample"; //Testing purposes
-        //let wordL = testword.length;
-        let wordLength = testword.length;//test line just for UX stuff
-        console.log(wordLength)
-        //end tests
-        let wordSpaces = [];
-        for (let i = 0; i < wordLength; i++) {
-            wordSpaces[i] = "_____ ";
-        }
-        return(<p>{wordSpaces}</p>);
+        // testword = "Sample"; //Testing purposes
+        // //let wordL = testword.length;
+        // let wordLength = testword.length;//test line just for UX stuff
+        // console.log(wordLength)
+        // //end tests
+        // let wordSpaces = [];
+        // for (let i = 0; i < wordLength; i++) {
+        //     wordSpaces[i] = "_____ ";
+        // }
+        // return(<p>{wordSpaces}</p>);
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', fontSize: '24px', margin: '20px' }}>
+              {word.split('').map((letter, index) => (
+                <span key={index} style={{ margin: '0 5px', borderBottom: '2px solid #000', width: '20px', textAlign: 'center' }}>
+                  {guessedLetters.includes(letter) ? letter : '_'}
+                </span>
+              ))}
+            </div>
+          );
     }
 
     return(
@@ -105,7 +113,7 @@ export default function GamePage() {
                              
                 <div style={{position: 'relative', bottom: -20}}>
                     <div style={{paddingLeft: 200, position: 'absolute', bottom: 150}}>
-                        <PrintWordSpaces/>
+                        <PrintWordSpaces word={word} guessedLetters={guessedLetters}/>
                     </div>
                     <br/>
                     <br/>
