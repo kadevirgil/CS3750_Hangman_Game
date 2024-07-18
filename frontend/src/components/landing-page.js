@@ -32,7 +32,8 @@ export default function LandingPage() {
             window.alert(await response.json())
             return;
         }
-        setUser({name: "chad", numGuesses: 0, lengthOfWord: 0});
+        window.alert("Sign in for " + newPerson.name);
+        setUser({name: "", numGuesses: 0, lengthOfWord: 0});
         navigate("/hangman");
     }
 

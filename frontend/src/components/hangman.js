@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import {useNavigate} from 'react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-//allow 6 guesses
+//allow 6 guesses <--incorrectGuesses that is
 
 
 function Letter({ letter, onLetterClick, disabled }) {
@@ -27,7 +27,31 @@ export default function GamePage() {
         numGuesses: 0,
         lengthOfWord: 0
     });
-
+    // Runs on page load to get session
+    useEffect(() => {       
+        
+        async function fetchData(){
+            
+            const response = await fetch('http://localhost:4000/user', 
+                {
+                    method: "GET",
+                    credentials: "include"            
+                }
+            )  
+            if(response.status === 400){                   
+                window.alert(await response.json())
+                navigate("/");
+                return;
+            }
+            const responseRecord = await response.json();
+            console.log(responseRecord);
+            setUser(responseRecord);   
+                     
+                   
+        }
+        fetchData();
+        
+    }, [navigate]); 
     const [word, setWord] = useState('');
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [incorrectGuesses, setIncorrectGuesses] = useState(0);
@@ -57,23 +81,20 @@ export default function GamePage() {
     useEffect(() => {
         async function PlayGame(e) {
 
-            const response = await fetch("http://localhost:4000/records/generateWord", {
-                method: "GET",
-                credentials: "include"
-                
-            })
-            if (response.status === 400) {
-                window.alert(await response.json())
-                return;
-            }
-            word = response;
-            console.log(`The word sent from the backend is ${word}`);
-            //setUser({numGuesses: 0, lengthOfWord: word.length});
+        const response = await fetch("http://localhost:4000/records/generateWord", {
+            method: "GET",
+            credentials: "include"
             
+        })
+        if (response.status === 400) {
+            window.alert(await response.json())
+            return;
         }
-        PlayGame();
-    },[])
-    
+        //word = response;
+        console.log(`The word sent from the backend is ${word}`);
+        //setUser({numGuesses: 0, lengthOfWord: word.length});
+        
+    }
 
     //Function to get the number of letter spaces to display to the user
     function PrintWordSpaces({ word, guessedLetters }) {
@@ -102,7 +123,7 @@ export default function GamePage() {
 
     return(
         <div>
-            <h3>Welcome to Hangman</h3>
+            <h3>Welcome to Hangman {user.name}</h3>
             
                 <div>
                     <label>Start guessing letters!</label>
