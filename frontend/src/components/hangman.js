@@ -28,6 +28,11 @@ export default function GamePage() {
         lengthOfWord: 0
     });
 
+    const [word, setWord] = useState({
+        word: "",
+        lengthOfWord: 0
+    });
+
     // Runs on page load to get session
     useEffect(() => {       
         
@@ -46,8 +51,7 @@ export default function GamePage() {
             }
             const responseRecord = await response.json();
             console.log(responseRecord);
-            setUser(responseRecord);   
-                     
+            setUser(responseRecord);          
                    
         }
         fetchData();
@@ -65,18 +69,17 @@ export default function GamePage() {
                 return;
             }
             const wordObj = await response.json();
+            setWord(wordObj);
             
             console.log(`The word sent from the backend is ${word}`);
-            //setUser({numGuesses: 0, lengthOfWord: word.length});
             
         }
         PlayGame();
         
     }, []); 
 
-    //Test comment
+    
 
-    const [word, setWord] = useState('');
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [incorrectGuesses, setIncorrectGuesses] = useState(0);
 
@@ -97,22 +100,11 @@ export default function GamePage() {
     };
 
     //Function to get the number of letter spaces to display to the user
-    function PrintWordSpaces({ word, guessedLetters }) {
-        //let wordLength = word.length;
-        //tests
-        // testword = "Sample"; //Testing purposes
-        // //let wordL = testword.length;
-        // let wordLength = testword.length;//test line just for UX stuff
-        // console.log(wordLength)
-        // //end tests
-        // let wordSpaces = [];
-        // for (let i = 0; i < wordLength; i++) {
-        //     wordSpaces[i] = "_____ ";
-        // }
-        // return(<p>{wordSpaces}</p>);
+    function PrintWordSpaces({ randomWord, guessedLetters }) {
+        
         return (
             <div style={{ display: 'flex', justifyContent: 'center', fontSize: '24px', margin: '20px' }}>
-              {word.split('').map((letter, index) => (
+              {randomWord.split('').map((letter, index) => (
                 <span key={index} style={{ margin: '0 5px', borderBottom: '2px solid #000', width: '20px', textAlign: 'center' }}>
                   {guessedLetters.includes(letter) ? letter : '_'}
                 </span>
@@ -134,7 +126,7 @@ export default function GamePage() {
                              
                 <div style={{position: 'relative', bottom: -20}}>
                     <div style={{paddingLeft: 200, position: 'absolute', bottom: 150}}>
-                        <PrintWordSpaces word={word} guessedLetters={guessedLetters}/>
+                        <PrintWordSpaces randomWord={word.word} guessedLetters={guessedLetters}/>
                     </div>
                     <br/>
                     <br/>
