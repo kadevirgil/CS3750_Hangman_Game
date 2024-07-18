@@ -22,15 +22,30 @@ routes.route('/records/add').post(async (req, res) =>{
             lengthOfWord: 0
         };
         await db_connect.collection("highscores").insertOne(myObj);
+        req.session.name = req.body.name;
         errorCode = 200;
-        let status = "Success";
+        let status = "Successful login for " + req.session.name;
+        console.log(status);
         res.status(errorCode).json(status);
+
             
         
     } catch (err) {
         throw err;
     }
 })
+// Loginng out of session
+routes.route("/logout").get(async (req, res) => {
+    console.log("In /logout, session is: " + req.session.name);
+    if (req.session.name) {
+        req.session.destroy();        
+    }
+    else {
+        res.status(400).json("No session found");        
+    }
+    res.status(200).json("Logged out");
+      
+});
 
 // Getting all highscores for a given word length
 routes.route('/records/highscores/:wordLength').get(async (req, res) => {
