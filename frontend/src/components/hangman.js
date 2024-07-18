@@ -68,10 +68,12 @@ export default function GamePage() {
             console.log(`The word sent from the backend is ${word}`);
             //setUser({numGuesses: 0, lengthOfWord: word.length});
             
-                }
-            PlayGame();
+        }
+        PlayGame();
         
     }, [navigate]); 
+
+    //Test comment
 
     const [word, setWord] = useState('');
     const [guessedLetters, setGuessedLetters] = useState([]);
