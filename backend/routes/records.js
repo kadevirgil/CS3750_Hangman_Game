@@ -80,6 +80,7 @@ routes.route('/records/generateWord').get(async (req, res) => {
         throw err;
     }
 });
+
 // Session get 
 routes.route("/user").get(async (req, res) => {
     try {        
