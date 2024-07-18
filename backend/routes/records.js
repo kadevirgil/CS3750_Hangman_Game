@@ -23,6 +23,7 @@ routes.route('/records/add').post(async (req, res) =>{
         };
         await db_connect.collection("highscores").insertOne(myObj);
         req.session.name = req.body.name;
+        console.log("In /add, session is: " + req.session.name + " with id: " + req.session.id);
         errorCode = 200;
         let status = "Successful login for " + req.session.name;
         console.log(status);
@@ -73,6 +74,24 @@ routes.route('/records/generateWord').get(async (req, res) => {
     } catch (err) {
         throw err;
     }
+});
+// Session get 
+routes.route("/user").get(async (req, res) => {
+    try{        
+        let db_connect = dbo.getDb();
+        let myquery = { name: req.session.name};
+        let status = await db_connect.collection("highscores").findOne(myquery); 
+        console.log(status);       
+        let errorCode = 200;
+        if (!req.session.name || req.session.name == null) {
+            errorCode = 400; 
+            status ="No session exists";                
+        }              
+        res.status(errorCode).json(status);
+        
+} catch (err) {
+    throw err;
+}
 });
 
 module.exports = routes; 
