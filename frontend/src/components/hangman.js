@@ -1,13 +1,9 @@
-import React from 'react';
+//import React, { useEffect } from 'react';
 import {useNavigate} from 'react-router';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 //allow 6 guesses <--incorrectGuesses that is
 
-//generate random word
-function GenerateRandomWord() {
-
-}
 
 function Letter({ letter, onLetterClick, disabled }) {
     return (
@@ -31,6 +27,7 @@ export default function GamePage() {
         numGuesses: 0,
         lengthOfWord: 0
     });
+
     // Runs on page load to get session
     useEffect(() => {       
         
@@ -54,8 +51,28 @@ export default function GamePage() {
                    
         }
         fetchData();
+
+        // fetch the random word from backend
+        async function PlayGame(e) {
+
+            const response = await fetch("http://localhost:4000/records/generateWord", {
+                method: "GET",
+                credentials: "include"
+                
+            })
+            if (response.status === 400) {
+                window.alert(await response.json())
+                return;
+            }
+            //word = response;
+            console.log(`The word sent from the backend is ${word}`);
+            //setUser({numGuesses: 0, lengthOfWord: word.length});
+            
+                }
+            PlayGame();
         
     }, [navigate]); 
+
     const [word, setWord] = useState('');
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [incorrectGuesses, setIncorrectGuesses] = useState(0);
@@ -66,6 +83,7 @@ export default function GamePage() {
         });
     }
 
+    //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
         if (!guessedLetters.includes(letter)) {
           setGuessedLetters([...guessedLetters, letter]);
@@ -75,7 +93,7 @@ export default function GamePage() {
         }
     };
 
-    let testword = '';
+    let testword = 'sample';
 
     //function to handle the click of a letter
 
@@ -100,20 +118,28 @@ export default function GamePage() {
     }
 
     //Function to get the number of letter spaces to display to the user
-    function PrintWordSpaces() {
+    function PrintWordSpaces({ word, guessedLetters }) {
         //let wordLength = word.length;
-
         //tests
-        testword = "Sample"; //Testing purposes
-        //let wordL = testword.length;
-        let wordLength = testword.length;//test line just for UX stuff
-        console.log(wordLength)
-        //end tests
-        let wordSpaces = [];
-        for (let i = 0; i < wordLength; i++) {
-            wordSpaces[i] = "_____ ";
-        }
-        return(<p>{wordSpaces}</p>);
+        // testword = "Sample"; //Testing purposes
+        // //let wordL = testword.length;
+        // let wordLength = testword.length;//test line just for UX stuff
+        // console.log(wordLength)
+        // //end tests
+        // let wordSpaces = [];
+        // for (let i = 0; i < wordLength; i++) {
+        //     wordSpaces[i] = "_____ ";
+        // }
+        // return(<p>{wordSpaces}</p>);
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', fontSize: '24px', margin: '20px' }}>
+              {word.split('').map((letter, index) => (
+                <span key={index} style={{ margin: '0 5px', borderBottom: '2px solid #000', width: '20px', textAlign: 'center' }}>
+                  {guessedLetters.includes(letter) ? letter : '_'}
+                </span>
+              ))}
+            </div>
+          );
     }
 
     return(
@@ -129,7 +155,7 @@ export default function GamePage() {
                              
                 <div style={{position: 'relative', bottom: -20}}>
                     <div style={{paddingLeft: 200, position: 'absolute', bottom: 150}}>
-                        <PrintWordSpaces/>
+                        <PrintWordSpaces word={word} guessedLetters={guessedLetters}/>
                     </div>
                     <br/>
                     <br/>
