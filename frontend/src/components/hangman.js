@@ -72,7 +72,7 @@ export default function GamePage() {
         }
         PlayGame();
         
-    }, [navigate]); 
+    }, []); 
 
     //Test comment
 
