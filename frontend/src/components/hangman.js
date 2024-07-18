@@ -93,11 +93,7 @@ export default function GamePage() {
             window.alert(await response.json())
             return;
         }
-<<<<<<< HEAD
         word = response.toString();
-=======
-        //word = response;
->>>>>>> 9b6cd3969f29cfd271058abd3cd8b30e0d8e5e1b
         console.log(`The word sent from the backend is ${word}`);
         //setUser({numGuesses: 0, lengthOfWord: word.length});
         

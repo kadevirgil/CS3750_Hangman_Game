@@ -77,7 +77,7 @@ routes.route('/records/generateWord').get(async (req, res) => {
 });
 // Session get 
 routes.route("/user").get(async (req, res) => {
-    try{        
+    try {        
         let db_connect = dbo.getDb();
         let myquery = { name: req.session.name};
         let status = await db_connect.collection("highscores").findOne(myquery); 
@@ -89,9 +89,9 @@ routes.route("/user").get(async (req, res) => {
         }              
         res.status(errorCode).json(status);
         
-} catch (err) {
-    throw err;
-}
+    } catch (err) {
+        throw err;
+    }
 });
 
 module.exports = routes; 
