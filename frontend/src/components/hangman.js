@@ -44,7 +44,7 @@ export default function GamePage() {
             window.alert(await response.json())
             return;
         }
-        word = response;
+        word = response.toString();
         console.log(`The word sent from the backend is ${word}`);
         setUser({numGuesses: 0, lengthOfWord: word.length});
         
