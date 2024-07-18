@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+//import React, { useEffect } from 'react';
 import {useNavigate} from 'react-router';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 //allow 6 guesses <--incorrectGuesses that is
 
@@ -27,6 +27,7 @@ export default function GamePage() {
         numGuesses: 0,
         lengthOfWord: 0
     });
+
     // Runs on page load to get session
     useEffect(() => {       
         
@@ -50,8 +51,28 @@ export default function GamePage() {
                    
         }
         fetchData();
+
+        // fetch the random word from backend
+        async function PlayGame(e) {
+
+            const response = await fetch("http://localhost:4000/records/generateWord", {
+                method: "GET",
+                credentials: "include"
+                
+            })
+            if (response.status === 400) {
+                window.alert(await response.json())
+                return;
+            }
+            //word = response;
+            console.log(`The word sent from the backend is ${word}`);
+            //setUser({numGuesses: 0, lengthOfWord: word.length});
+            
+                }
+            PlayGame();
         
     }, [navigate]); 
+
     const [word, setWord] = useState('');
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [incorrectGuesses, setIncorrectGuesses] = useState(0);
@@ -62,6 +83,7 @@ export default function GamePage() {
         });
     }
 
+    //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
         if (!guessedLetters.includes(letter)) {
           setGuessedLetters([...guessedLetters, letter]);
@@ -75,26 +97,6 @@ export default function GamePage() {
 
     //function to handle the click of a letter
 
-    
-
-    // Get random word when page renders
-    useEffect(() => {
-        async function PlayGame(e) {
-
-        const response = await fetch("http://localhost:4000/records/generateWord", {
-            method: "GET",
-            credentials: "include"
-            
-        })
-        if (response.status === 400) {
-            window.alert(await response.json())
-            return;
-        }
-        //word = response;
-        console.log(`The word sent from the backend is ${word}`);
-        //setUser({numGuesses: 0, lengthOfWord: word.length});
-        
-    }
 
     //Function to get the number of letter spaces to display to the user
     function PrintWordSpaces({ word, guessedLetters }) {
