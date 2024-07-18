@@ -95,30 +95,6 @@ export default function GamePage() {
         }
     };
 
-    let testword = 'sample';
-
-    //function to handle the click of a letter
-
-    
-
-    //Not sure if I need this onStartGame function
-    async function PlayGame(e) {
-
-        const response = await fetch("http://localhost:4000/records/generateWord", {
-            method: "GET",
-            credentials: "include"
-            
-        })
-        if (response.status === 400) {
-            window.alert(await response.json())
-            return;
-        }
-        word = response.toString();
-        console.log(`The word sent from the backend is ${word}`);
-        //setUser({numGuesses: 0, lengthOfWord: word.length});
-        
-    }
-
     //Function to get the number of letter spaces to display to the user
     function PrintWordSpaces({ word, guessedLetters }) {
         //let wordLength = word.length;
