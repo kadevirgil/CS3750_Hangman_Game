@@ -11,7 +11,7 @@ const App = () => {
       <Routes>
         <Route path='/' element={ <LandingPage/> } />
         <Route path='/hangman' element={ <Hangman/> } />
-        <Route path='/highscores' element={ <HighScores/> } />
+        <Route path='/highscores/:wordLength' element={ <HighScores/> } />
       </Routes>
     </div>
   );

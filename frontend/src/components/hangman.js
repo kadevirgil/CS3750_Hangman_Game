@@ -63,7 +63,6 @@ export default function GamePage() {
                 return;
             }
             const responseRecord = await response.json();
-            console.log(responseRecord);
             setUser(responseRecord);          
                    
         }
@@ -84,7 +83,6 @@ export default function GamePage() {
             const wordObj = await response.json();
             setWord(wordObj);
             
-            console.log(`The word is: ${word.word}`);
             
         }
         PlayGame();
@@ -111,29 +109,42 @@ export default function GamePage() {
             const containsAll = (updateGuessedLetters, gameWord) => gameWord.every(gameWordLetter => updateGuessedLetters.includes(gameWordLetter));
             if (containsAll(updateGuessedLetters, gameWord)) {
                 setIsWin(!isWin);
-                PrintLoss(isWin);  
-            }
+                PrintLoss(isWin); 
+                setUser({
+                    'name': user.name,
+                    'numGuesses': guessedLetters.length,
+                    'lengthOfWord': word.word.length,
+                });
+            } 
         }
     };
 
     
     function PrintLoss({isWin}) {
         if (!isWin && incorrectGuesses >= 6) {
+            disableButtons();
             return (
                 <div>
                     <h1 style={{ color: 'darkred'}}>You Lost!</h1>
                     <h3>The word was {word.word}</h3>
-                    <button onClick={() => navigate('/highscores')}>Highscores Page</button>
+                    <button onClick={() => navigate(`/highscores/${word.lengthOfWord}`)}>Highscores Page</button>
                 </div>
             );
         } else if (isWin) {
             return (
                 <div>
                     <h1 style={{ color: 'darkgreen'}}>You Won!</h1>
-                    <button onClick={() => navigate('/highscores')}>Highscores Page</button>
+                    <button onClick={() => navigate(`/highscores/${word.lengthOfWord}`)}>Highscores Page</button>
                 </div>
             );
         }
+    }
+
+    function disableButtons() {
+        const letterDiv1 = document.getElementById('letters1');
+        const letterDiv2 = document.getElementById('letters2');
+        letterDiv1.style.display = 'none';
+        letterDiv2.style.display = 'none';
     }
 
     //Function to get the number of letter spaces to display to the user
@@ -156,17 +167,18 @@ export default function GamePage() {
             
                 <div>
                     <label>Start guessing letters!</label><br />
-                    <label>You Only Get 6 Incorrect Guesses</label><br />
                     <img src={images[incorrectGuesses]}/>
-                    <PrintLoss isWin={isWin} />
+                    <PrintLoss isWin={isWin} style={{display: 'block', padding: '100px'}} />
                 </div> 
+                <div style={{height: '3rem'}}>
+                </div>
                 <div style={{position: 'relative', bottom: -20}}>
                     <div style={{paddingLeft: 200, position: 'absolute', bottom: 150}}>
                         <PrintWordSpaces randomWord={word.word} guessedLetters={guessedLetters}/>
                     </div>
                     <br/>
                     <br/>
-                    <div style={{paddingLeft: 50, }}>
+                    <div id='letters1' style={{paddingLeft: 50, }}>
                         <Letter letter="A" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("A")}/>
                         <Letter letter="B" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("B")}/>
                         <Letter letter="D" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("D")}/>
@@ -183,7 +195,7 @@ export default function GamePage() {
                         <Letter letter="N" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("N")} />
                         
                     </div>
-                    <div style={{paddingLeft: 50}}>
+                    <div id='letters2' style={{paddingLeft: 50}}>
                         <Letter letter="P" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("P")} />
                         <Letter letter="O" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("O")} />
                         <Letter letter="Q" onLetterClick={handleLetterClick} disabled={guessedLetters.includes("Q")} />

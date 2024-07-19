@@ -49,9 +49,10 @@ routes.route("/logout").get(async (req, res) => {
 // Getting all highscores for a given word length
 routes.route('/records/highscores/:wordLength').get(async (req, res) => {
     try {
-        let db_connect = dbo.getDb();
-        let myQuery = { lengthOfWord: req.params.wordLength };
-        const result = await db_connect.collection('highscores').find(myQuery).toArray();
+        const db_connect = dbo.getDb();
+        const myQuery = { lengthOfWord: req.params.wordLength };
+        const mySort = { numGuesses: 1 }; 
+        const result = await db_connect.collection('highscores').find(myQuery).sort(mySort).toArray();
         res.json(result);
     } catch (err) {
         throw err;
