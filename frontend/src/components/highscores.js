@@ -10,7 +10,31 @@ const scores = (props) => (
 export default function HighScores() {
     const navigate = useNavigate();
     const params = useParams();
+    const [user, setUser] = useState({});
     const [records, setRecords] = useState([]);
+    //Checking if user has played before on run
+    useEffect(() => {       
+        
+        async function fetchData(){
+            
+            const response = await fetch('http://localhost:4000/user', 
+                {
+                    method: "GET",
+                    credentials: "include"            
+                }
+            );  
+            if(response.status === 400){                   
+                window.alert(await response.json())
+                navigate("/");
+                return;
+            }
+            const responseRecord = await response.json();
+            console.log(responseRecord);
+            setUser(responseRecord);          
+                   
+        }
+        fetchData();
+    },[]);
     // This will run right when the page open to get highscores for given word length to display thought we can display them the same way we displayed records from past assignments not currently working
     
     //  useEffect(() => { 
