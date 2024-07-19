@@ -9,7 +9,9 @@ function Letter({ letter, onLetterClick, disabled }) {
     return (
         <button 
         className="letter"
-        onClick={() => onLetterClick(letter)}
+        onClick={onLetterClick(letter)}
+
+        //This part is working good of changing color and disabling once the letter has been selected
         disabled={disabled}
         style={{ backgroundColor: disabled ? 'gray' : '#f0f0f0', 
             color: 'black', padding: '6px', margin: '5px', 
@@ -32,6 +34,9 @@ export default function GamePage() {
         word: "",
         lengthOfWord: 0
     });
+
+    const [guessedLetters, setGuessedLetters] = useState([]);
+    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
 
     // Runs on page load to get session
     useEffect(() => {       
@@ -75,13 +80,18 @@ export default function GamePage() {
             
         }
         PlayGame();
+
+        const resetGame = () => {
+            setGuessedLetters([]);
+            setIncorrectGuesses(0);
+        };
+
+        resetGame();
         
     }, [navigate]); 
-
     
 
-    const [guessedLetters, setGuessedLetters] = useState([]);
-    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
+    const [wordLetters, setWordLetters] = useState({})
 
     function updateSession(jsonObj) {
         return setUser((prevJsonObj) => {
@@ -91,11 +101,20 @@ export default function GamePage() {
 
     //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
+        // if (!letter in guessedLetters) {
+        //     setGuessedLetters([...guessedLetters, letter]);
+        //     console.log(guessedLetters);
+        //     setUser(user.numGuesses + 1);
+        // }
+        //Outer IF statement makes sure the selected letter goes into 'guessedLetters'
         if (!guessedLetters.includes(letter)) {
           setGuessedLetters([...guessedLetters, letter]);
-          if (!word.includes(letter)) {
+          console.log(guessedLetters);
+          //Inner IF statement should check to see if the word has the letter. If it does, then call PrintWordSpaces
+          if (!word.word.includes(letter)) {
             setIncorrectGuesses(incorrectGuesses + 1);
           }
+          
         }
     };
 
