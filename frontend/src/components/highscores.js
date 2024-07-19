@@ -34,26 +34,27 @@ export default function HighScores() {
                    
         }
         fetchData();
-    },[]);
+        async function getRecords() {
+            const response = await fetch(`http://localhost:4000/highscores/${params.wordLength}`, ); // change ${params.wordLength}
+            if (response.status === 400) {
+                const message = `An error occurred: ${response.statusText}`;
+                window.alert(message);
+                return;
+            }
+            else if (response === 200) {
+                window.alert("Success");
+                const responseRecords = await response.json();
+                setRecords(responseRecords);
+            }           
+            return;
+        }
+        getRecords();
+        return;
+    }, [scores.length, navigate]);
     // This will run right when the page open to get highscores for given word length to display thought we can display them the same way we displayed records from past assignments not currently working
     
     //  useEffect(() => { 
-    //     async function getRecords() {
-    //         const response = await fetch(`http://localhost:4000/records/${params.wordLength}`, ); // change ${params.wordLength}
-    //         if (response.status === 400) {
-    //             const message = `An error occurred: ${response.statusText}`;
-    //             window.alert(message);
-    //             return;
-    //         }
-    //         else if (response === 200) {
-    //             window.alert("Success");
-    //             const responseRecords = await response.json();
-    //             setRecords(responseRecords);
-    //         }           
-    //         return;
-    //     }
-    //     getRecords();
-    //     return;
+        
     //  },[records.length]);
     async function playAgain(){ // doesn't exist / hasn't even been started
 
@@ -101,7 +102,7 @@ export default function HighScores() {
     //When we have the highscores working we need to change out [BLANK] for the var instead also displaying of highscores may not be working/correct just grabbed it from the past assignments haven't been able to test it
     return (
         <div>
-            <h3>High Scores for [BLANK] letter words </h3> 
+            <h3>High Scores for { params.wordLength} letter words </h3> 
             <table style={{ marginTop: 20 }} >
                 <thead>
                     <tr>

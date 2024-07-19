@@ -2,6 +2,9 @@
 import {useNavigate} from 'react-router';
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
+import axios from 'axios';
+
+// const ObjectId = require('mongodb').ObjectId; 
 
 //allow 6 guesses <--incorrectGuesses that is
 import phase0 from './images/0.jpg';
@@ -11,6 +14,7 @@ import phase3 from './images/3.jpg';
 import phase4 from './images/4.jpg';
 import phase5 from './images/5.jpg';
 import phase6 from './images/6.jpg';
+
 
 const images = [phase0, phase1, phase2, phase3, phase4, phase5, phase6];
 
@@ -100,41 +104,59 @@ export default function GamePage() {
         const updateGuessedLetters = [...guessedLetters, letter]; 
         setGuessedLetters(updateGuessedLetters);
         if (!word.word.includes(letter)) {
+            // Loss check
             setIncorrectGuesses(incorrectGuesses + 1);
             if (incorrectGuesses == 6) {
                 PrintLoss(isWin);
             }
-        } else {
+        } else { 
+            // Win Check
             const gameWord = word.word.split(''); // GAME = ['G', 'A', 'M', 'E']
             const containsAll = (updateGuessedLetters, gameWord) => gameWord.every(gameWordLetter => updateGuessedLetters.includes(gameWordLetter));
             if (containsAll(updateGuessedLetters, gameWord)) {
                 setIsWin(!isWin);
-                PrintLoss(isWin); 
                 setUser({
                     'name': user.name,
                     'numGuesses': guessedLetters.length,
                     'lengthOfWord': word.word.length,
                 });
+                axios({
+                    url: `http://localhost:4000/update/${user._id}`,
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'applications/json',
+                    },
+                    data: user
+                })
+                .then((res) => {
+                    console.log(res.data);
+                })
+                .catch((err) => {
+                    console.log(err); 
+                })
+                PrintLoss(isWin);                 
             } 
         }
     };
 
     
     function PrintLoss({isWin}) {
+        
         if (!isWin && incorrectGuesses >= 6) {
             disableButtons();
             return (
                 <div>
                     <h1 style={{ color: 'darkred'}}>You Lost!</h1>
                     <h3>The word was {word.word}</h3>
-                    <button onClick={() => navigate(`/highscores/${word.lengthOfWord}`)}>Highscores Page</button>
+                    <button onClick={() => navigate(`/highscores/${word.word.lengthOfWord}`)}>Highscores Page</button>
                 </div>
             );
         } else if (isWin) {
+            disableButtons();
             return (
                 <div>
                     <h1 style={{ color: 'darkgreen'}}>You Won!</h1>
-                    <button onClick={() => navigate(`/highscores/${word.lengthOfWord}`)}>Highscores Page</button>
+                    <button onClick={() => navigate(`/highscores/${word.word.lengthOfWord}`)}>Highscores Page</button>
                 </div>
             );
         }
