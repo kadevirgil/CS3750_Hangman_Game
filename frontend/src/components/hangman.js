@@ -9,7 +9,9 @@ function Letter({ letter, onLetterClick, disabled }) {
     return (
         <button 
         className="letter"
-        onClick={() => onLetterClick(letter)}
+        onClick={onLetterClick(letter)}
+
+        //This part is working good of changing color and disabling once the letter has been selected
         disabled={disabled}
         style={{ backgroundColor: disabled ? 'gray' : '#f0f0f0', 
             color: 'black', padding: '6px', margin: '5px', 
@@ -73,12 +75,18 @@ export default function GamePage() {
             }
             const wordObj = await response.json();
             setWord(wordObj);
-            console.log(`Word is: ${word.word}`);
+            
+            console.log(`The word sent from the backend is ${word}`);
+            
         }
         PlayGame();
-
         
-    }, []); 
+    }, [navigate]); 
+
+    
+
+    const [guessedLetters, setGuessedLetters] = useState([]);
+    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
 
     function updateSession(jsonObj) {
         return setUser((prevJsonObj) => {
@@ -103,6 +111,7 @@ export default function GamePage() {
 
     //Function to get the number of letter spaces to display to the user
     function PrintWordSpaces({ randomWord, guessedLetters }) {
+        
         return (
             <div style={{ display: 'flex', justifyContent: 'center', fontSize: '24px', margin: '20px' }}>
               {randomWord.split('').map((letter, index) => (
