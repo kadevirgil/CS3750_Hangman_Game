@@ -24,12 +24,12 @@ export default function HighScores() {
                 }
             );  
             if(response.status === 400){                   
-                window.alert(await response.json())
+                //window.alert(await response.json())
                 navigate("/");
                 return;
             }
             const responseRecord = await response.json();
-            console.log(responseRecord);
+            //console.log(responseRecord);
             setUser(responseRecord);          
                    
         }
@@ -73,15 +73,15 @@ export default function HighScores() {
                 credentials: "include"
             }
         );
-        console.log(response); 
+        //console.log(response); 
         if(response.status === 400){               
 
             const message= `No session found: ${response.statusText}`;
-            window.alert(message);
+            //window.alert(message);
             
         }        
         else if (response.status === 200) {
-            window.alert("Logged Out");              
+            //window.alert("Logged Out");              
         }  
         navigate("/");           
         return;                    
