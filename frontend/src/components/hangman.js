@@ -4,7 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 
 //allow 6 guesses <--incorrectGuesses that is
+import phase0 from './images/0.jpg';
+import phase1 from './images/1.jpg';
+import phase2 from './images/2.jpg';
+import phase3 from './images/3.jpg';
+import phase4 from './images/4.jpg';
+import phase5 from './images/5.jpg';
+import phase6 from './images/6.jpg';
 
+const images = [phase0, phase1, phase2, phase3, phase4, phase5, phase6];
 
 function Letter({ letter, onLetterClick, disabled }) {
     return (
@@ -108,6 +116,7 @@ export default function GamePage() {
         }
     };
 
+    
     function PrintLoss({isWin}) {
         if (!isWin && incorrectGuesses >= 6) {
             return (
@@ -148,11 +157,9 @@ export default function GamePage() {
                 <div>
                     <label>Start guessing letters!</label><br />
                     <label>You Only Get 6 Incorrect Guesses</label><br />
-                    <label>Incorrect Guesses: {incorrectGuesses}</label>
+                    <img src={images[incorrectGuesses]}/>
                     <PrintLoss isWin={isWin} />
-                </div>
-                <div style={{height: '300px'}}>
-                </div>     
+                </div> 
                 <div style={{position: 'relative', bottom: -20}}>
                     <div style={{paddingLeft: 200, position: 'absolute', bottom: 150}}>
                         <PrintWordSpaces randomWord={word.word} guessedLetters={guessedLetters}/>
