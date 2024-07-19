@@ -9,9 +9,7 @@ function Letter({ letter, onLetterClick, disabled }) {
     return (
         <button 
         className="letter"
-        onClick={onLetterClick(letter)}
-
-        //This part is working good of changing color and disabling once the letter has been selected
+        onClick={() => onLetterClick(letter)}
         disabled={disabled}
         style={{ backgroundColor: disabled ? 'gray' : '#f0f0f0', 
             color: 'black', padding: '6px', margin: '5px', 
@@ -76,17 +74,12 @@ export default function GamePage() {
             const wordObj = await response.json();
             setWord(wordObj);
             
-            console.log(`The word sent from the backend is ${word}`);
+            console.log(`The word is: ${word.word}`);
             
         }
         PlayGame();
         
     }, [navigate]); 
-
-    
-
-    const [guessedLetters, setGuessedLetters] = useState([]);
-    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
 
     function updateSession(jsonObj) {
         return setUser((prevJsonObj) => {
@@ -96,6 +89,7 @@ export default function GamePage() {
 
     //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
+        
         console.log(`Letter clicked: ${letter}`);
         const updateGuessedLetters = [...guessedLetters, letter]; 
         console.log(updateGuessedLetters);
