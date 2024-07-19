@@ -71,7 +71,7 @@ routes.route('/records/generateWord').get(async (req, res) => {
             const word = words[randIndex]; 
             console.log(word);
             const jsonObject = {
-                'word': word,
+                'word': word.toUpperCase(),
                 'lengthOfWord': word.length,
             }
             res.status(200).json(jsonObject);
