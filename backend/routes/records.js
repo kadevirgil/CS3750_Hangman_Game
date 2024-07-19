@@ -66,8 +66,8 @@ routes.route('/records/generateWord').get(async (req, res) => {
                 console.error(err);
                 return;
             }
-            const randIndex = Math.floor(Math.random() * 1000);
             const words = data.split('\r\n'); 
+            const randIndex = Math.floor(Math.random() * words.length);
             const word = words[randIndex]; 
             console.log(word);
             const jsonObject = {

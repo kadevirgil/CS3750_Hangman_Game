@@ -1,6 +1,7 @@
 //import React, { useEffect } from 'react';
 import {useNavigate} from 'react-router';
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; 
 
 //allow 6 guesses <--incorrectGuesses that is
 
@@ -11,7 +12,7 @@ function Letter({ letter, onLetterClick, disabled }) {
         className="letter"
         onClick={() => onLetterClick(letter)}
         disabled={disabled}
-        style={{ backgroundColor: disabled ? 'gray' : '#f0f0f0', 
+        style={{ backgroundColor: disabled ? 'slategrey' : '#f0f0f0', 
             color: 'black', padding: '6px', margin: '5px', 
             fontSize: '25px', cursor: disabled ? 'not-allowed' : 'pointer' }}
         >
@@ -22,6 +23,7 @@ function Letter({ letter, onLetterClick, disabled }) {
 
 export default function GamePage() {
     const navigate = useNavigate();
+    const [isWin, setIsWin] = useState(false);
     const [user, setUser] = useState({
         name: "",
         numGuesses: 0,
@@ -79,7 +81,7 @@ export default function GamePage() {
         }
         PlayGame();
         
-    }, [navigate]); 
+    }, []); 
 
     function updateSession(jsonObj) {
         return setUser((prevJsonObj) => {
@@ -89,7 +91,6 @@ export default function GamePage() {
 
     //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
-        
         console.log(`Letter clicked: ${letter}`);
         const updateGuessedLetters = [...guessedLetters, letter]; 
         console.log(updateGuessedLetters);
@@ -100,8 +101,25 @@ export default function GamePage() {
             // I think thats what was throwing this off 
             console.log(`Number of incorrect guesses: ${incorrectGuesses + 1}`);
             setIncorrectGuesses(incorrectGuesses + 1);
+            if (incorrectGuesses == 6) {
+                PrintLoss(isWin);
+            }
         }
     };
+
+    function PrintLoss({isWin}) {
+        if (!isWin && incorrectGuesses >= 6) {
+            return (
+                <div>
+                    <h1 style={{ color: 'darkred'}}>You Lost!</h1>
+                    <h3>The word was {word.word}</h3>
+                    <Link to={`/highscores`}>
+                    Highscores page
+                    </Link>
+                </div>
+            );
+        }
+    }
 
     //Function to get the number of letter spaces to display to the user
     function PrintWordSpaces({ randomWord, guessedLetters }) {
@@ -118,13 +136,19 @@ export default function GamePage() {
     }
 
     return(
-        <div>
+        <div style={{backgroundColor: 'slategrey', padding: '2em'}}>
             <h3>Welcome to Hangman {user.name}</h3>
             
                 <div>
-                    <label>Start guessing letters!</label>
+                    <label>Start guessing letters!</label><br />
+                    <label>You Only Get 6 Incorrect Guesses</label><br />
+                    <label>Incorrect Guesses: {incorrectGuesses}</label>
+
                 </div>
                 <div style={{height: '300px'}}>
+                </div>
+                <div>
+                    <PrintLoss isWin={isWin} />
                 </div>
                 
                              
