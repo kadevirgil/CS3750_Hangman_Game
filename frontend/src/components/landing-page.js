@@ -29,10 +29,10 @@ export default function LandingPage() {
             
         })
         if (response.status === 400) {
-            window.alert(await response.json())
+            //window.alert(await response.json())
             return;
         }
-        window.alert("Sign in for " + newPerson.name);
+        //window.alert("Sign in for " + newPerson.name);
         setUser({name: "", numGuesses: 0, lengthOfWord: 0});
         navigate("/hangman");
     }
