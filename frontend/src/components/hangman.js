@@ -9,7 +9,9 @@ function Letter({ letter, onLetterClick, disabled }) {
     return (
         <button 
         className="letter"
-        onClick={() => onLetterClick(letter)}
+        onClick={onLetterClick(letter)}
+
+        //This part is working good of changing color and disabling once the letter has been selected
         disabled={disabled}
         style={{ backgroundColor: disabled ? 'gray' : '#f0f0f0', 
             color: 'black', padding: '6px', margin: '5px', 
@@ -32,6 +34,9 @@ export default function GamePage() {
         word: "",
         lengthOfWord: 0
     });
+
+    const [guessedLetters, setGuessedLetters] = useState([]);
+    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
 
     // Runs on page load to get session
     useEffect(() => {       
@@ -73,13 +78,23 @@ export default function GamePage() {
             console.log(`Word is: ${word.word}`)
         }
         PlayGame();
+
+        const resetGame = () => {
+            setGuessedLetters([]);
+            setIncorrectGuesses(0);
+        };
+
+        resetGame();
         
+<<<<<<< HEAD
     }, []); 
 
+=======
+    }, [navigate]); 
+>>>>>>> d5ec927453700e74f839061151814ebfe2790ab0
     
 
-    const [guessedLetters, setGuessedLetters] = useState([]);
-    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
+    const [wordLetters, setWordLetters] = useState({})
 
     function updateSession(jsonObj) {
         return setUser((prevJsonObj) => {
