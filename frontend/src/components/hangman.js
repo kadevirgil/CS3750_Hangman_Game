@@ -91,18 +91,19 @@ export default function GamePage() {
 
     //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
-        console.log(`Letter clicked: ${letter}`);
         const updateGuessedLetters = [...guessedLetters, letter]; 
-        console.log(updateGuessedLetters);
         setGuessedLetters(updateGuessedLetters);
-        console.log(`is ${letter} in ${word.word}: ${word.word.includes(letter)}`);
         if (!word.word.includes(letter)) {
-            // This check needs to be case sensitive 'a' and 'A' are not the same 
-            // I think thats what was throwing this off 
-            console.log(`Number of incorrect guesses: ${incorrectGuesses + 1}`);
             setIncorrectGuesses(incorrectGuesses + 1);
             if (incorrectGuesses == 6) {
                 PrintLoss(isWin);
+            }
+        } else {
+            const gameWord = word.word.split(''); // GAME = ['G', 'A', 'M', 'E']
+            const containsAll = (updateGuessedLetters, gameWord) => gameWord.every(gameWordLetter => updateGuessedLetters.includes(gameWordLetter));
+            if (containsAll(updateGuessedLetters, gameWord)) {
+                setIsWin(!isWin);
+                PrintLoss(isWin);  
             }
         }
     };
@@ -113,9 +114,14 @@ export default function GamePage() {
                 <div>
                     <h1 style={{ color: 'darkred'}}>You Lost!</h1>
                     <h3>The word was {word.word}</h3>
-                    <Link to={`/highscores`}>
-                    Highscores page
-                    </Link>
+                    <button onClick={() => navigate('/highscores')}>Highscores Page</button>
+                </div>
+            );
+        } else if (isWin) {
+            return (
+                <div>
+                    <h1 style={{ color: 'darkgreen'}}>You Won!</h1>
+                    <button onClick={() => navigate('/highscores')}>Highscores Page</button>
                 </div>
             );
         }
@@ -143,15 +149,10 @@ export default function GamePage() {
                     <label>Start guessing letters!</label><br />
                     <label>You Only Get 6 Incorrect Guesses</label><br />
                     <label>Incorrect Guesses: {incorrectGuesses}</label>
-
-                </div>
-                <div style={{height: '300px'}}>
-                </div>
-                <div>
                     <PrintLoss isWin={isWin} />
                 </div>
-                
-                             
+                <div style={{height: '300px'}}>
+                </div>     
                 <div style={{position: 'relative', bottom: -20}}>
                     <div style={{paddingLeft: 200, position: 'absolute', bottom: 150}}>
                         <PrintWordSpaces randomWord={word.word} guessedLetters={guessedLetters}/>
