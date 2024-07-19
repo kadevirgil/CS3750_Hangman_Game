@@ -33,6 +33,9 @@ export default function GamePage() {
         lengthOfWord: 0
     });
 
+    const [guessedLetters, setGuessedLetters] = useState([]);
+    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
+
     // Runs on page load to get session
     useEffect(() => {       
         
@@ -43,7 +46,7 @@ export default function GamePage() {
                     method: "GET",
                     credentials: "include"            
                 }
-            )  
+            );  
             if(response.status === 400){                   
                 window.alert(await response.json())
                 navigate("/");
@@ -63,25 +66,19 @@ export default function GamePage() {
                 method: "GET",
                 credentials: "include"
                 
-            })
+            });
             if (response.status === 400) {
                 window.alert(await response.json())
                 return;
             }
             const wordObj = await response.json();
             setWord(wordObj);
-            
-            console.log(`The word sent from the backend is ${word}`);
-            
+            console.log(`Word is: ${word.word}`);
         }
         PlayGame();
+
         
-    }, [navigate]); 
-
-    
-
-    const [guessedLetters, setGuessedLetters] = useState([]);
-    const [incorrectGuesses, setIncorrectGuesses] = useState(0);
+    }, []); 
 
     function updateSession(jsonObj) {
         return setUser((prevJsonObj) => {
@@ -91,17 +88,21 @@ export default function GamePage() {
 
     //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
-        if (!guessedLetters.includes(letter)) {
-          setGuessedLetters([...guessedLetters, letter]);
-          if (!word.includes(letter)) {
+        console.log(`Letter clicked: ${letter}`);
+        const updateGuessedLetters = [...guessedLetters, letter]; 
+        console.log(updateGuessedLetters);
+        setGuessedLetters(updateGuessedLetters);
+        console.log(`is ${letter} in ${word.word}: ${word.word.includes(letter)}`);
+        if (!word.word.includes(letter)) {
+            // This check needs to be case sensitive 'a' and 'A' are not the same 
+            // I think thats what was throwing this off 
+            console.log(`Number of incorrect guesses: ${incorrectGuesses + 1}`);
             setIncorrectGuesses(incorrectGuesses + 1);
-          }
         }
     };
 
     //Function to get the number of letter spaces to display to the user
     function PrintWordSpaces({ randomWord, guessedLetters }) {
-        
         return (
             <div style={{ display: 'flex', justifyContent: 'center', fontSize: '24px', margin: '20px' }}>
               {randomWord.split('').map((letter, index) => (
