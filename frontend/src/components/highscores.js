@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import '../App.css'; 
+
 //for displaying highscores
-const scores = (props) => (
+const Scores = (props) => (
     <tr>
         <td>{props.records.name}</td>
         <td>{props.records.numGuesses}</td>
@@ -35,22 +37,21 @@ export default function HighScores() {
         }
         fetchData();
         async function getRecords() {
-            const response = await fetch(`http://localhost:4000/highscores/${params.wordLength}`, ); // change ${params.wordLength}
+            const response = await fetch(`http://localhost:4000/records/highscores/${params.wordLength}`, );
             if (response.status === 400) {
                 const message = `An error occurred: ${response.statusText}`;
                 window.alert(message);
                 return;
             }
-            else if (response === 200) {
-                window.alert("Success");
+            else if (response.status === 200) {
                 const responseRecords = await response.json();
                 setRecords(responseRecords);
-            }           
+            } 
             return;
         }
         getRecords();
         return;
-    }, [scores.length, navigate]);
+    }, [Scores.length, navigate]);
     // This will run right when the page open to get highscores for given word length to display thought we can display them the same way we displayed records from past assignments not currently working
     
     //  useEffect(() => { 
@@ -58,14 +59,19 @@ export default function HighScores() {
     //  },[records.length]);
     async function playAgain(){ // doesn't exist / hasn't even been started
 
-        // const response = await fetch("http://localhost:4000/playAgain",
-        //     {
-        //         method: "GET",
-        //         credentials: "include"
-        //     }
-        // );
-                               
-        
+        const response = await fetch("http://localhost:4000/user",
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+        if (response.status === 400) { // If no session exists
+            window.alert('No session exists');
+            return
+        } else { // allow them to play again
+            navigate("/hangman"); 
+            return; 
+        }
     }
     async function logout(){
         const response = await fetch("http://localhost:4000/logout",
@@ -91,7 +97,7 @@ export default function HighScores() {
     function highScoresList() {
         return records.map((record) => {
             return (
-                <scores 
+                <Scores 
                 records={record} 
                 key={record._id} 
                 />
@@ -101,9 +107,9 @@ export default function HighScores() {
     }
     //When we have the highscores working we need to change out [BLANK] for the var instead also displaying of highscores may not be working/correct just grabbed it from the past assignments haven't been able to test it
     return (
-        <div>
-            <h3>High Scores for { params.wordLength} letter words </h3> 
-            <table style={{ marginTop: 20 }} >
+        <div id='highscores-container'>
+            <h3>High Scores for { params.wordLength } letter words </h3> 
+            <table id='highscores' style={{ margin: 20 }} >
                 <thead>
                     <tr>
                         <th>Name</th>

@@ -1,7 +1,6 @@
 //import React, { useEffect } from 'react';
 import {useNavigate} from 'react-router';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; 
 import axios from 'axios';
 
 // const ObjectId = require('mongodb').ObjectId; 
@@ -15,8 +14,8 @@ import phase4 from './images/4.jpg';
 import phase5 from './images/5.jpg';
 import phase6 from './images/6.jpg';
 
-
 const images = [phase0, phase1, phase2, phase3, phase4, phase5, phase6];
+
 
 function Letter({ letter, onLetterClick, disabled }) {
     return (
@@ -39,7 +38,7 @@ export default function GamePage() {
     const [user, setUser] = useState({
         name: "",
         numGuesses: 0,
-        lengthOfWord: 0
+        lengthOfWord: 0,
     });
 
     const [word, setWord] = useState({
@@ -93,11 +92,13 @@ export default function GamePage() {
         
     }, []); 
 
-    function updateSession(jsonObj) {
+    function updateUser(jsonObj) {
         return setUser((prevJsonObj) => {
             return { ...prevJsonObj, ...jsonObj };
         });
     }
+
+    
 
     //Renders button disabled once guessed
     const handleLetterClick = (letter) => {
@@ -115,25 +116,30 @@ export default function GamePage() {
             const containsAll = (updateGuessedLetters, gameWord) => gameWord.every(gameWordLetter => updateGuessedLetters.includes(gameWordLetter));
             if (containsAll(updateGuessedLetters, gameWord)) {
                 setIsWin(!isWin);
-                setUser({
+                let editedUser = {
                     'name': user.name,
-                    'numGuesses': guessedLetters.length,
-                    'lengthOfWord': word.word.length,
-                });
-                axios({
-                    url: `http://localhost:4000/update/${user._id}`,
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'applications/json',
-                    },
-                    data: user
-                })
-                .then((res) => {
-                    console.log(res.data);
-                })
-                .catch((err) => {
-                    console.log(err); 
-                })
+                    'numGuesses': updateGuessedLetters.length,
+                    'lengthOfWord': word.lengthOfWord,
+                }
+                setUser(user => ({
+                    ...user,
+                    ...editedUser
+                }));
+                const userID = user._id; 
+                console.log(`user id: ${userID}`); 
+                console.log(user); 
+                axios.put(`http://localhost:4000/update/${userID}`, editedUser)
+                    .then(res => {
+                        setUser({
+                            name: "",
+                            numGuesses: 0,
+                            lengthOfWord: 0,
+                        });
+                        console.log(res.data);  
+                    })
+                    .catch(err => {
+                        console.log(err); 
+                    }); 
                 PrintLoss(isWin);                 
             } 
         }
@@ -156,7 +162,7 @@ export default function GamePage() {
             return (
                 <div>
                     <h1 style={{ color: 'darkgreen'}}>You Won!</h1>
-                    <button onClick={() => navigate(`/highscores/${word.word.lengthOfWord}`)}>Highscores Page</button>
+                    <button onClick={() => navigate(`/highscores/${word.lengthOfWord}`)}>Highscores Page</button>
                 </div>
             );
         }

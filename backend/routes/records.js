@@ -17,7 +17,7 @@ routes.route('/records/add').post(async (req, res) =>{
         let myObj = {
             name: req.body.name,
             numGuesses: 0,
-            lengthOfWord: 0
+            lengthOfWord: 0,
         };
         await db_connect.collection("highscores").insertOne(myObj);
         req.session.name = req.body.name;
@@ -50,17 +50,22 @@ routes.route("/logout").get(async (req, res) => {
 routes.route('/records/highscores/:wordLength').get(async (req, res) => {
     try {
         let db_connect = dbo.getDb();
-        const myQuery = { lengthOfWord: req.params.wordLength };
+        const myQuery = { lengthOfWord: Number(req.params.wordLength) };
         const mySort = { numGuesses: 1 }; 
-        const result = await db_connect.collection('highscores').find(myQuery).sort(mySort).toArray();
-        res.status(200).json(result);
+        const result = await db_connect
+            .collection('highscores')
+            .find(myQuery)
+            .sort(mySort) // sort by number of guesses
+            .limit( 10 ) // limit by the top ten high scores
+            .toArray();
+        res.json(result); 
     } catch (err) {
         throw err;
     }
 });
 
 // Updating the users scores after a successful game
-routes.route('/update/:id').post(async (req, res) => {
+routes.route('/update/:id').put(async (req, res) => {
     try {
         let db_connect = dbo.getDb();
         const myQuery = { _id: new ObjectId(req.params.id) }; 
@@ -72,7 +77,6 @@ routes.route('/update/:id').post(async (req, res) => {
             },
         };
         const result = await db_connect.collection('highscores').updateOne(myQuery, newValues);
-        console.log(result);
         res.status(200).json(result); 
     } catch (err) {
         throw err;
@@ -86,7 +90,6 @@ routes.route('/delete/:id').delete(async (req, res) => {
         let db_connect = dbo.getDb();
         const myQuery = { _id: new ObjectId(req.params.id) };
         const result = await db_connect.collection('highscores').deleteOne(myQuery);
-        console.log(`Deleted object: ${result}`); 
         res.status(200).json(result);
     } catch (err) {
         throw err;

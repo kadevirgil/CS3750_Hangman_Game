@@ -25,9 +25,9 @@ export default function LandingPage() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newPerson),
-            credentials: "include"
+            credentials: "include",
             
-        })
+        });
         if (response.status === 400) {
             //window.alert(await response.json())
             return;
